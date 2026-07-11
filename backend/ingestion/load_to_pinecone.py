@@ -12,8 +12,8 @@ from app.core.config import get_settings
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 100
+CHUNK_SIZE = 800
+CHUNK_OVERLAP = 160
 EMBEDDING_DIMENSIONS = 1536
 UPSERT_BATCH_SIZE = 50
 
