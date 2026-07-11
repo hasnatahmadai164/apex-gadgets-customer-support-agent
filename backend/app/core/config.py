@@ -8,12 +8,13 @@ class Settings(BaseSettings):
 
     database_url: str
 
+    reference_document_path: str
+
     pinecone_api_key: str
     pinecone_index_name: str
 
     azure_openai_endpoint: str
     azure_openai_api_key: str
-    azure_openai_api_version: str
     azure_deployment_router: str
     azure_deployment_rag: str
     azure_deployment_orders_tickets: str
