@@ -2,18 +2,18 @@ import hashlib
 import logging
 from pathlib import Path
 
-from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pinecone import Pinecone, ServerlessSpec
 from pypdf import PdfReader
 
 from app.core.config import get_settings
+from app.core.llm_clients import get_embeddings_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 160
+CHUNK_SIZE = 500
+CHUNK_OVERLAP = 100
 EMBEDDING_DIMENSIONS = 1536
 UPSERT_BATCH_SIZE = 50
 
@@ -56,11 +56,7 @@ def main() -> None:
     chunks = chunk_text(text)
     logger.info("Split %s into %d chunks", pdf_path.name, len(chunks))
 
-    embeddings_client = OpenAIEmbeddings(
-        model=settings.azure_deployment_embeddings,
-        base_url=f"{settings.azure_openai_endpoint.rstrip('/')}/openai/v1/",
-        api_key=settings.azure_openai_api_key,
-    )
+    embeddings_client = get_embeddings_model()
 
     pc = Pinecone(api_key=settings.pinecone_api_key)
     ensure_index(pc, settings.pinecone_index_name)
