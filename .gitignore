@@ -6,7 +6,7 @@ venv/
 .pytest_cache/
 .coverage
 htmlcov/
-secrets/token.json
+secrets/
 .env
 .env.*
 !.env.example
