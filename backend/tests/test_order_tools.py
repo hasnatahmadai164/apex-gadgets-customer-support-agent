@@ -1,7 +1,9 @@
 from app.tools.order_tools import create_order, get_order_status
 
 
-async def test_create_order_and_look_up_by_email():
+async def test_create_order_and_look_up_by_email(monkeypatch):
+    monkeypatch.setattr("app.tools.order_tools.send_order_confirmation_email", lambda *a, **k: None)
+
     result = await create_order(
         "Test Customer", "test.customer@example.com", "555-0000", "1 Test St", "Galaxy S25"
     )
@@ -19,3 +21,18 @@ async def test_get_order_status_returns_message_for_missing_order():
 async def test_get_order_status_requires_id_or_email():
     status = await get_order_status()
     assert "provide either" in status.lower()
+
+
+async def test_create_order_succeeds_even_if_email_sending_fails(monkeypatch):
+    def _raise(*args, **kwargs):
+        raise RuntimeError("email service unavailable")
+
+    monkeypatch.setattr("app.tools.order_tools.send_order_confirmation_email", _raise)
+
+    result = await create_order(
+        "Test Customer", "fails@example.com", "555-0000", "1 Test St", "Pixel 10"
+    )
+    assert "Order #" in result
+    assert "could not be sent" in result
+
+    
