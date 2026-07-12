@@ -4,6 +4,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 from app.agents.supervisor import orders_node, rag_node, route_from_supervisor, tickets_node
 
+
 def test_route_from_supervisor_returns_the_stored_route():
     assert route_from_supervisor({"route": "rag"}) == "rag"
     assert route_from_supervisor({"route": "orders"}) == "orders"
@@ -32,11 +33,11 @@ async def test_tickets_node_delegates_to_the_tickets_agent(monkeypatch):
     assert result["messages"][0].content == "ticket agent reply"
 
 
-def test_rag_node_wraps_the_rag_agent_answer(monkeypatch):
-    monkeypatch.setattr(
-        "app.agents.supervisor.answer_question",
-        lambda question: "canned answer",
-    )
+async def test_rag_node_wraps_the_rag_agent_answer(monkeypatch):
+    async def fake_answer_question(question):
+        return "canned answer"
+
+    monkeypatch.setattr("app.agents.supervisor.answer_question", fake_answer_question)
     state = {"messages": [HumanMessage(content="what is the delivery time?")], "route": "rag"}
-    result = rag_node(state)
+    result = await rag_node(state)
     assert result["messages"][0].content == "canned answer"

@@ -38,9 +38,9 @@ def router_node(state: GraphState) -> dict:
     return {"route": result.route}
 
 
-def rag_node(state: GraphState) -> dict:
+async def rag_node(state: GraphState) -> dict:
     question = state["messages"][-1].content
-    answer = answer_question(question)
+    answer = await answer_question(question)
     return {"messages": [AIMessage(content=answer)]}
 
 
@@ -83,4 +83,4 @@ supervisor_graph = build_supervisor_graph()
 
 async def handle_message(text: str) -> str:
     result = await supervisor_graph.ainvoke({"messages": [HumanMessage(content=text)], "route": ""})
-    return result["messages"][-1].content          
+    return result["messages"][-1].content

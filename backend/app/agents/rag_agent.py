@@ -120,8 +120,8 @@ def build_rag_graph():
 rag_graph = build_rag_graph()
 
 
-def answer_question(question: str) -> str:
-    result = rag_graph.invoke(
+async def answer_question(question: str) -> str:
+    result = await rag_graph.ainvoke(
         {
             "question": question,
             "search_query": question,
