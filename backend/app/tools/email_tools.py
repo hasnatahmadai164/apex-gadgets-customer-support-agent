@@ -24,7 +24,7 @@ def _get_credentials():
     from google_auth_oauthlib.flow import InstalledAppFlow
 
     settings = get_settings()
-    token_path = Path(settings.gmail_token_path)
+    token_path = Path(settings.gmail_token_path or "./token.json")
 
     creds = None
     if token_path.exists():
@@ -80,3 +80,4 @@ def send_ticket_confirmation_email(to: str, ticket_number: str) -> None:
         f"Thanks for your patience."
     )
     _send_email(to, subject, body)
+    
