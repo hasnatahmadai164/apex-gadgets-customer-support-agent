@@ -4,7 +4,6 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 from app.agents.supervisor import orders_node, rag_node, route_from_supervisor, tickets_node
 
-
 def test_route_from_supervisor_returns_the_stored_route():
     assert route_from_supervisor({"route": "rag"}) == "rag"
     assert route_from_supervisor({"route": "orders"}) == "orders"
