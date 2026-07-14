@@ -122,7 +122,7 @@ export function ChatWidget() {
                   <Sparkles className="h-4 w-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-tight">
+                  <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold tracking-tight">
                     Apex Gadgets Support
                   </span>
                   <span className="flex items-center gap-1.5 text-[11px] text-indigo-200">
@@ -180,7 +180,7 @@ export function ChatWidget() {
               </div>
             </form>
 
-            <p className="pb-2.5 text-center text-[11px] text-zinc-400">
+            <p className="pb-2.5 text-center text-[11px] font-bold text-zinc-500">
               Powered by Apex Gadgets
             </p>
           </motion.div>

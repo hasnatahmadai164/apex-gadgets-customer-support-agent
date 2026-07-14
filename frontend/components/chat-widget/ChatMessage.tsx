@@ -48,8 +48,8 @@ function MessageLabel({ isUser }: { isUser: boolean }) {
     <span
       className={
         isUser
-          ? "pr-1 text-[11px] font-medium text-zinc-400"
-          : "pl-9 text-[11px] font-medium text-zinc-400"
+          ? "pr-1 text-[11px] font-bold text-zinc-500"
+          : "pl-9 text-[11px] font-bold text-zinc-500"
       }
     >
       {isUser ? "You" : "Apex Gadgets"}
