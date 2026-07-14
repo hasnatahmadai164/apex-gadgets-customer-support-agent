@@ -10,6 +10,12 @@ import { useChatWidget } from "./ChatWidgetContext"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"
 
+const GREETING: ChatMessageData = {
+  id: "greeting",
+  role: "assistant",
+  content: "Hello! How can I assist you today?",
+}
+
 export function ChatWidget() {
   const { isOpen, setIsOpen, pendingMessage, clearPendingMessage } = useChatWidget()
   const [messages, setMessages] = useState<ChatMessageData[]>([])
@@ -139,14 +145,11 @@ export function ChatWidget() {
 
             <ScrollArea className="flex-1 px-4 py-4">
               <div className="flex flex-col gap-3">
-                {messages.length === 0 && (
-                  <p className="text-sm text-zinc-500">
-                    Ask about products, orders, or support, we&apos;re here to help.
-                  </p>
+                {messages.length === 0 ? (
+                  <ChatMessage message={GREETING} />
+                ) : (
+                  messages.map((message) => <ChatMessage key={message.id} message={message} />)
                 )}
-                {messages.map((message) => (
-                  <ChatMessage key={message.id} message={message} />
-                ))}
                 <div ref={bottomRef} />
               </div>
             </ScrollArea>
@@ -176,6 +179,10 @@ export function ChatWidget() {
                 </button>
               </div>
             </form>
+
+            <p className="pb-2.5 text-center text-[11px] text-zinc-400">
+              Powered by Apex Gadgets
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
