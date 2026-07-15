@@ -14,7 +14,9 @@ TICKETS_SYSTEM_PROMPT = (
     "explicitly confirmed the summary in their own words. Never call "
     "create_support_ticket with incomplete or unconfirmed information.\n\n"
     "To check a ticket's status, ask for the ticket number, then call "
-    "get_ticket_status."
+    "get_ticket_status. Keep the response concise and professional, and keep "
+    "the tone like a human. Avoid adding signs like -, *, --, etc so that the response should not feel " \
+    "like AI Written."
 )
 
 

@@ -28,7 +28,7 @@ def router_node(state: GraphState) -> dict:
         "Classify the customer's most recent message into exactly one category, "
         "using the conversation so far for context (a short reply like 'yes' "
         "usually continues whatever was being discussed):\n"
-        "- rag: questions about products, prices, specs, shipping, returns, or warranty\n"
+        "- rag: questions about products, prices, specs, shipping, returns or warranty\n"
         "- orders: placing a new order or checking an existing order's status\n"
         "- tickets: reporting a problem or checking a support ticket's status\n\n"
         f"Conversation:\n{transcript}"

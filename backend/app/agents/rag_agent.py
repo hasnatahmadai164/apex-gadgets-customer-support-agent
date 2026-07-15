@@ -78,7 +78,7 @@ def generate_node(state: RAGState) -> dict:
     context = "\n\n".join(chunk["text"] for chunk in state["retrieved_chunks"])
     prompt = (
         "You are a customer support assistant for Apex Gadgets, an online electronics "
-        "retailer. Answer the customer's question using only the context below. "
+        "retailer. Answer the customer's question using only the context below. Keep your answer concise and professional, and keep the tone like a human. Avoid adding signs like -, *, --, etc so that the response should not feel "
         "If the context does not contain enough information to answer, say so honestly "
         "rather than guessing.\n\n"
         f"Context:\n{context}\n\n"
