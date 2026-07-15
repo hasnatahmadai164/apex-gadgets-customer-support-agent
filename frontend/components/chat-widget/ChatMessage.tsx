@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { PackageCheck, Sparkles } from "lucide-react"
+import ReactMarkdown from "react-markdown"
 
 export type ChatMessageData = {
   id: string
@@ -53,6 +54,38 @@ function MessageLabel({ isUser }: { isUser: boolean }) {
       }
     >
       {isUser ? "You" : "Apex Gadgets"}
+    </span>
+  )
+}
+
+const markdownComponents = {
+  p: ({ children }: { children?: React.ReactNode }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+  ul: ({ children }: { children?: React.ReactNode }) => (
+    <ul className="mb-1.5 list-disc space-y-0.5 pl-4 last:mb-0">{children}</ul>
+  ),
+  ol: ({ children }: { children?: React.ReactNode }) => (
+    <ol className="mb-1.5 list-decimal space-y-0.5 pl-4 last:mb-0">{children}</ol>
+  ),
+  li: ({ children }: { children?: React.ReactNode }) => <li>{children}</li>,
+  strong: ({ children }: { children?: React.ReactNode }) => (
+    <strong className="font-semibold">{children}</strong>
+  ),
+  a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
+    <a href={href} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+      {children}
+    </a>
+  ),
+}
+
+function TypingIndicator() {
+  return (
+    <span className="inline-flex items-center gap-1.5 py-1 text-zinc-500">
+      <span className="text-xs">Typing</span>
+      <span className="inline-flex items-center gap-1">
+        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:-0.3s]" />
+        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:-0.15s]" />
+        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400" />
+      </span>
     </span>
   )
 }
@@ -111,13 +144,9 @@ export function ChatMessage({ message }: { message: ChatMessageData }) {
           }
         >
           {message.content ? (
-            message.content
+            <ReactMarkdown components={markdownComponents}>{message.content}</ReactMarkdown>
           ) : (
-            <span className="inline-flex items-center gap-1 py-1">
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:-0.3s]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:-0.15s]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400" />
-            </span>
+            <TypingIndicator />
           )}
         </div>
       </div>

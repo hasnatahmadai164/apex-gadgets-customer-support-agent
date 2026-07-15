@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { MessageCircle, Send, Sparkles, X } from "lucide-react"
+import { MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessage, type ChatMessageData } from "./ChatMessage"
@@ -16,16 +16,30 @@ const GREETING: ChatMessageData = {
   content: "Hello! How can I assist you today?",
 }
 
+const STARTER_PROMPTS = [
+  "What's your return policy?",
+  "Track my order",
+  "I want to place an order",
+  "Report an issue",
+]
+
 export function ChatWidget() {
   const { isOpen, setIsOpen, pendingMessage, clearPendingMessage } = useChatWidget()
   const [messages, setMessages] = useState<ChatMessageData[]>([])
   const [input, setInput] = useState("")
   const [isStreaming, setIsStreaming] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus()
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (pendingMessage) {
@@ -35,6 +49,18 @@ export function ChatWidget() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pendingMessage])
+
+  async function clearChat() {
+    try {
+      await fetch(`${API_URL}/chat/clear`, {
+        method: "POST",
+        credentials: "include",
+      })
+    } catch {
+      // even if the network call fails, still reset the local conversation
+    }
+    setMessages([])
+  }
 
   async function sendMessage(overrideText?: string) {
     const text = (overrideText ?? input).trim()
@@ -134,19 +160,42 @@ export function ChatWidget() {
                   </span>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="rounded-md p-1 text-indigo-200 transition-colors hover:bg-white/10 hover:text-white"
-                aria-label="Close chat"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={clearChat}
+                  className="rounded-md p-1 text-indigo-200 transition-colors hover:bg-white/10 hover:text-white"
+                  aria-label="Clear chat"
+                  title="Clear chat"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-md p-1 text-indigo-200 transition-colors hover:bg-white/10 hover:text-white"
+                  aria-label="Close chat"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
             <ScrollArea className="flex-1 px-4 py-4">
               <div className="flex flex-col gap-3">
                 {messages.length === 0 ? (
-                  <ChatMessage message={GREETING} />
+                  <>
+                    <ChatMessage message={GREETING} />
+                    <div className="flex flex-wrap gap-2 pl-9">
+                      {STARTER_PROMPTS.map((prompt) => (
+                        <button
+                          key={prompt}
+                          onClick={() => sendMessage(prompt)}
+                          className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                        >
+                          {prompt}
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   messages.map((message) => <ChatMessage key={message.id} message={message} />)
                 )}
@@ -163,6 +212,7 @@ export function ChatWidget() {
             >
               <div className="flex flex-1 items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-1 pl-4 pr-1.5 focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100">
                 <input
+                  ref={inputRef}
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
                   placeholder="Type your message..."
