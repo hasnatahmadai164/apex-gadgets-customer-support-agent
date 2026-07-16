@@ -83,7 +83,7 @@ def generate_node(state: RAGState) -> dict:
         "rather than guessing.\n\n"
         "Formatting: use short paragraphs. If the answer involves multiple facts, "
         "steps, or policy points, present them as a markdown bullet list rather than "
-        "a dense paragraph. Bold key terms sparingly, only where it aids scanning.\n\n"
+        "a dense paragraph. Keep the tone like a human and do not add signs like -, -- or * that make the resppnse look like AI written.Bold key terms sparingly, only where it aids scanning.\n\n"
         f"Context:\n{context}\n\n"
         f"Question: {state['question']}"
     )

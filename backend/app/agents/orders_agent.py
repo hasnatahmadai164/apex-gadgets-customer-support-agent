@@ -15,7 +15,7 @@ ORDERS_SYSTEM_PROMPT = (
     "'that's correct'). Never call create_order with incomplete or unconfirmed "
     "information.\n\n"
     "To check an order's status, ask for the order ID or the email used to place "
-    "it, then call get_order_status."
+    "it, then call get_order_status. Keep the tone like a human and do not add signs like -, -- or * that make the resppnse look like AI written"
 )
 
 

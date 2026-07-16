@@ -30,10 +30,35 @@ export function ChatWidget() {
   const [isStreaming, setIsStreaming] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const shouldAutoScrollRef = useRef(true)
+
+  function getViewport() {
+    return scrollContainerRef.current?.querySelector<HTMLElement>(
+      "[data-radix-scroll-area-viewport]"
+    )
+  }
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (shouldAutoScrollRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
   }, [messages])
+
+  useEffect(() => {
+    const viewport = getViewport()
+    if (!viewport) return
+
+    function handleScroll() {
+      const el = viewport
+      if (!el) return
+      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight
+      shouldAutoScrollRef.current = distanceFromBottom < 80
+    }
+
+    viewport.addEventListener("scroll", handleScroll)
+    return () => viewport.removeEventListener("scroll", handleScroll)
+  }, [isOpen])
 
   useEffect(() => {
     if (isOpen) {
@@ -179,29 +204,31 @@ export function ChatWidget() {
               </div>
             </div>
 
-            <ScrollArea className="flex-1 px-4 py-4">
-              <div className="flex flex-col gap-3">
-                {messages.length === 0 ? (
-                  <>
-                    <ChatMessage message={GREETING} />
-                    <div className="flex flex-wrap gap-2 pl-9">
-                      {STARTER_PROMPTS.map((prompt) => (
-                        <button
-                          key={prompt}
-                          onClick={() => sendMessage(prompt)}
-                          className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
-                        >
-                          {prompt}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  messages.map((message) => <ChatMessage key={message.id} message={message} />)
-                )}
-                <div ref={bottomRef} />
-              </div>
-            </ScrollArea>
+            <div ref={scrollContainerRef} className="min-h-0 flex-1">
+              <ScrollArea className="h-full px-4 py-4">
+                <div className="flex flex-col gap-3">
+                  {messages.length === 0 ? (
+                    <>
+                      <ChatMessage message={GREETING} />
+                      <div className="flex flex-wrap gap-2 pl-9">
+                        {STARTER_PROMPTS.map((prompt) => (
+                          <button
+                            key={prompt}
+                            onClick={() => sendMessage(prompt)}
+                            className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                          >
+                            {prompt}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    messages.map((message) => <ChatMessage key={message.id} message={message} />)
+                  )}
+                  <div ref={bottomRef} />
+                </div>
+              </ScrollArea>
+            </div>
 
             <form
               onSubmit={(event) => {
