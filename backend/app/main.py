@@ -26,7 +26,10 @@ app = FastAPI(title="Apex Gadgets Support Agent", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://apex-gadgets-frontend.wonderfulmeadow-9fdd2558.eastus2.azurecontainerapps.io",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
