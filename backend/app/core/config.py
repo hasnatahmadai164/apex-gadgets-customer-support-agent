@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     gmail_client_id: str
     gmail_client_secret: str
     gmail_token_path: str
+    gmail_token_json: str | None = None
 
 
 @lru_cache

@@ -19,11 +19,22 @@ def _build_client_config() -> dict:
 
 
 def _get_credentials():
+    import json
+
     from google.auth.transport.requests import Request
     from google.oauth2.credentials import Credentials
     from google_auth_oauthlib.flow import InstalledAppFlow
 
     settings = get_settings()
+
+    if settings.gmail_token_json:
+        creds = Credentials.from_authorized_user_info(
+            json.loads(settings.gmail_token_json), SCOPES
+        )
+        if creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        return creds
+
     token_path = Path(settings.gmail_token_path or "./token.json")
 
     creds = None
@@ -80,4 +91,3 @@ def send_ticket_confirmation_email(to: str, ticket_number: str) -> None:
         f"Thanks for your patience."
     )
     _send_email(to, subject, body)
-    
