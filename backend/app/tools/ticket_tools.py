@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import uuid
 
 from sqlalchemy import select
@@ -6,6 +7,8 @@ from sqlalchemy import select
 from app.db.models import SupportTicket
 from app.db.session import async_session_factory
 from app.tools.email_tools import send_ticket_confirmation_email
+
+logger = logging.getLogger(__name__)
 
 
 def _generate_ticket_number() -> str:
@@ -34,6 +37,7 @@ async def create_support_ticket(name: str, email: str, issue_description: str) -
         await asyncio.to_thread(send_ticket_confirmation_email, email, ticket.ticket_number)
         email_status = "A confirmation email has been sent."
     except Exception:
+        logger.exception("Failed to send ticket confirmation email")
         email_status = "The ticket was created, but the confirmation email could not be sent."
 
     return f"Support ticket {ticket.ticket_number} created, status: {ticket.status}. {email_status}"

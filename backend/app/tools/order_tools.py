@@ -1,10 +1,13 @@
 import asyncio
+import logging
 
 from sqlalchemy import select
 
 from app.db.models import Order
 from app.db.session import async_session_factory
 from app.tools.email_tools import send_order_confirmation_email
+
+logger = logging.getLogger(__name__)
 
 
 async def create_order(
@@ -36,6 +39,7 @@ async def create_order(
         await asyncio.to_thread(send_order_confirmation_email, email, order.id, product)
         email_status = "A confirmation email has been sent."
     except Exception:
+        logger.exception("Failed to send order confirmation email")
         email_status = "The order was placed, but the confirmation email could not be sent."
 
     return f"Order #{order.id} placed for {product}, status: {order.status}. {email_status}"
