@@ -19,6 +19,7 @@ def _build_client_config() -> dict:
 
 
 def _get_credentials():
+    import base64
     import json
 
     from google.auth.transport.requests import Request
@@ -28,9 +29,8 @@ def _get_credentials():
     settings = get_settings()
 
     if settings.gmail_token_json:
-        creds = Credentials.from_authorized_user_info(
-            json.loads(settings.gmail_token_json), SCOPES
-        )
+        decoded = base64.b64decode(settings.gmail_token_json).decode("utf-8")
+        creds = Credentials.from_authorized_user_info(json.loads(decoded), SCOPES)
         if creds.expired and creds.refresh_token:
             creds.refresh(Request())
         return creds
