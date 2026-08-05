@@ -235,24 +235,24 @@ export function ChatWidget() {
                 event.preventDefault()
                 sendMessage()
               }}
-              className="flex items-center gap-2 border-t border-zinc-100 p-3"
+              className="flex items-center gap-2 border-t border-zinc-100 p-4"
             >
-              <div className="flex flex-1 items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-1 pl-4 pr-1.5 focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100">
+              <div className="flex flex-1 items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-3 pl-5 pr-2 focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100">
                 <input
                   ref={inputRef}
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
                   placeholder="Type your message..."
                   disabled={isStreaming}
-                  className="flex-1 bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none disabled:opacity-50"
+                  className="flex-1 bg-transparent text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={isStreaming || !input.trim()}
                   aria-label="Send message"
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white transition-transform hover:scale-105 disabled:pointer-events-none disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white transition-transform hover:scale-105 disabled:pointer-events-none disabled:opacity-40"
                 >
-                  <Send className="h-3.5 w-3.5" />
+                  <Send className="h-4 w-4" />
                 </button>
               </div>
             </form>
