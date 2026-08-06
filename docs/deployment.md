@@ -95,9 +95,4 @@ fully signed off.
    instance (`alembic upgrade head`), same as local, just pointed at
    production.
 
-**Scaling note:** the original plan called for `min replicas = 0`
-(scale-to-zero) to minimize cost for demo purposes. For genuine
-production traffic, this trades cost for latency — a scaled-to-zero
-app has a cold start on the first request after idling. Worth
-deciding based on actual expected usage before deploying, not
-carrying over the demo-era default by habit.
+
