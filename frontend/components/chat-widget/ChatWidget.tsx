@@ -165,9 +165,9 @@ export function ChatWidget() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 16 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="mb-4 flex h-[32rem] w-96 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl"
+            className="mb-4 flex h-[32rem] w-96 flex-col overflow-hidden rounded-[22px] border border-white/60 bg-white/85 shadow-[0_30px_60px_-12px_rgba(24,24,27,0.28),0_4px_12px_rgba(24,24,27,0.08)] backdrop-blur-xl"
           >
-            <div className="flex items-center justify-between bg-gradient-to-r from-indigo-700 to-indigo-900 px-4 py-3.5 text-white">
+            <div className="flex items-center justify-between bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-950 px-4 py-3.5 text-white shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
                   <Sparkles className="h-4 w-4" />
@@ -237,7 +237,7 @@ export function ChatWidget() {
               }}
               className="flex items-center gap-2 border-t border-zinc-100 p-4"
             >
-              <div className="flex flex-1 items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-3 pl-5 pr-2 focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100">
+              <div className="flex flex-1 items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 py-3 pl-5 pr-2 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100">
                 <input
                   ref={inputRef}
                   value={input}
@@ -250,7 +250,7 @@ export function ChatWidget() {
                   type="submit"
                   disabled={isStreaming || !input.trim()}
                   aria-label="Send message"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white transition-transform hover:scale-105 disabled:pointer-events-none disabled:opacity-40"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white shadow-[0_3px_8px_rgba(67,56,202,0.35)] transition-transform hover:scale-105 disabled:pointer-events-none disabled:opacity-40"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -269,7 +269,7 @@ export function ChatWidget() {
         aria-label={isOpen ? "Close chat" : "Open chat"}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-lg"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 text-white shadow-[0_12px_28px_-6px_rgba(67,56,202,0.5),0_2px_6px_rgba(0,0,0,0.1)]"
       >
         {!isOpen && (
           <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-indigo-500 opacity-40" />

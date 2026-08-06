@@ -38,7 +38,7 @@ function parseConfirmation(content: string) {
 
 function AssistantAvatar() {
   return (
-    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-sm">
+    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-[0_2px_6px_rgba(67,56,202,0.3)]">
       <Sparkles className="h-3.5 w-3.5" />
     </div>
   )
@@ -105,7 +105,7 @@ export function ChatMessage({ message }: { message: ChatMessageData }) {
         <MessageLabel isUser={false} />
         <div className="flex items-start gap-2">
           <AssistantAvatar />
-          <div className="rounded-lg border border-dashed border-indigo-300 bg-indigo-50/60 px-3 py-2.5 font-[family-name:var(--font-mono)] text-xs text-indigo-900 shadow-sm">
+          <div className="rounded-lg border border-dashed border-indigo-300 bg-gradient-to-br from-indigo-50/80 to-indigo-100/50 px-3 py-2.5 font-[family-name:var(--font-mono)] text-xs text-indigo-900 shadow-sm">
             <div className="flex items-center justify-between gap-4 border-b border-dashed border-indigo-200 pb-1.5">
               <span className="flex items-center gap-1.5 font-semibold uppercase tracking-wide">
                 <PackageCheck className="h-3.5 w-3.5" />
@@ -139,7 +139,7 @@ export function ChatMessage({ message }: { message: ChatMessageData }) {
         <div
           className={
             isUser
-              ? "rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-600 to-indigo-700 px-3.5 py-2 text-sm text-white shadow-sm"
+              ? "rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-600 to-indigo-700 px-3.5 py-2 text-sm text-white shadow-[0_4px_10px_rgba(67,56,202,0.25)]"
               : "rounded-2xl rounded-bl-sm bg-zinc-100 px-3.5 py-2 text-sm text-zinc-900 shadow-sm"
           }
         >
