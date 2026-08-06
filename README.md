@@ -1,33 +1,33 @@
 # Apex Gadgets Support Agent
 
-An agentic RAG customer support system for Apex Gadgets, a fictional
+An agentic RAG customer support system for Apex Gadgets, a
 e-commerce store selling phones and laptops. A supervisor agent routes
-each customer message to one of three specialists — product/policy
-Q&A, order management, or support tickets — and hands off to a human
+each customer message to one of three specialists  product/policy
+Q&A, order management or support tickets and hands off to a human
 confirmation step before anything gets written to the database or
 emailed to a customer.
 
 Built as a full end-to-end project: ingestion pipeline, agentic
 retrieval loop, tool-calling agents, persistent conversation memory,
-a streaming chat API, and a real storefront frontend to put it in
+a streaming chat API and a real storefront frontend to put it in
 context.
 
 ## What it does
 
-- **Product and policy Q&A** — retrieval-augmented generation over a
+- **Product and policy Q&A**  retrieval-augmented generation over a
   Pinecone vector store, with an agentic retrieve → grade → rewrite →
   generate loop rather than naive single-shot retrieval.
-- **Order placement** — collects customer details conversationally,
+- **Order placement**   collects customer details conversationally,
   shows a confirmation summary, and only writes to the database and
   sends a confirmation email after the customer explicitly confirms.
-- **Order status lookups** — by order ID or email.
-- **Support ticket creation and status checks** — same
+- **Order status lookups**   by order ID or email.
+- **Support ticket creation and status checks**   same
   collect-confirm-execute pattern as orders, with an auto-generated
   ticket number.
-- **Persistent memory** — full conversation history is checkpointed to
+- **Persistent memory**   full conversation history is checkpointed to
   Postgres per browser session and survives page refreshes and server
   restarts.
-- **Streaming responses** — answers stream token-by-token over SSE
+- **Streaming responses**   answers stream token-by-token over SSE
   into the chat widget.
 
 ## Tech stack
