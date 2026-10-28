@@ -2,82 +2,58 @@
 
 ## Overview
 
-Apex Gadgets Customer Support Agent is an agentic RAG customer support system for
-Apex Gadgets, an e-commerce company selling mobile phones and laptops.
-It handles product and policy Q&A, order placement, order status
-lookups and support ticket management through a conversational
-interface. A supervisor agent routes each incoming message to the
-appropriate specialist, which either retrieves and reasons over product
-knowledge or executes a state-changing action (placing an order, filing
-a ticket) only after explicit user confirmation.
+Apex Gadgets Customer Support Agent is an agentic RAG customer support system for Apex Gadgets, an ecommerce company that sells mobile phones and laptops. Customers chat with it to ask about products and policies, place orders, check order status, and manage support tickets.
 
-## Functional Requirements
+A supervisor agent reads each incoming message and routes it to the right specialist. A specialist either retrieves and reasons over product knowledge, or carries out an action that changes data, like placing an order or filing a ticket. Those actions only happen after the customer explicitly confirms.
 
-**FR1   Product and Policy Q&A**
-The system answers questions about products and store policies using
-retrieval-augmented generation over a Pinecone vector store. Retrieval
-is agentic: results are graded for relevance, the query is rewritten
-and retried if the results are weak and only then is an answer
-generated.
+## Functional requirements
 
-**FR2   Persistent Session Memory**
-Conversation state persists across page refreshes via LangGraph's
-PostgresSaver, keyed by a thread_id stored in a cookie. A "Clear Chat"
-action deletes that thread's checkpoints from Postgres and resets the
-frontend state.
+### FR1. Product and policy Q&A
 
-**FR3   Streaming Responses**
-Responses stream to the frontend over SSE, from the point the model
-starts generating through to the widget.
+The system answers questions about products and store policies using retrieval augmented generation over a Pinecone vector store. Retrieval is agentic. The results are graded for relevance, and if they are weak the query is rewritten and tried again. Only after that does the system generate an answer.
 
-**FR4   Order Placement**
-The agent conversationally collects customer name, email, phone number,
-home address and desired product, presents a confirmation summary and
-waits for explicit user confirmation before writing anything. On
-confirmation, it writes an order record to Postgres, sends a
-confirmation email and replies with confirmation to the user.
+### FR2. Persistent session memory
 
-**FR5   Order Status Check**
-Given an order ID or email, the agent reports current order status,
-including a reason if the order is delayed.
+Conversation state survives page refreshes. LangGraph's Postgres checkpointer (`AsyncPostgresSaver`) stores it, keyed by a `thread_id` kept in a cookie. A "Clear Chat" action deletes that thread's checkpoints from Postgres and resets the frontend state.
 
-**FR6   Support Ticket Creation**
-The agent conversationally collects name, email and issue description,
-confirms with the user, then on confirmation writes a ticket record
-with an auto-generated ticket number to Postgres and sends a
-confirmation email.
+### FR3. Streaming responses
 
-**FR7   Support Ticket Status Check**
-Given a ticket number, the agent reports whether the ticket is resolved
-or pending.
+Responses stream to the frontend over SSE, starting from the moment the model begins generating and continuing all the way to the chat widget.
 
-## Non-Functional Requirements
+### FR4. Order placement
 
-**Performance**
-Time to first streamed token should feel conversational, not batch —
-users should see output beginning within roughly 1–2 seconds of
-sending a message, even when that message triggers a retrieval or
-tool-calling path.
+The agent collects the customer's name, email, phone number, home address and the product they want, all through conversation. It then shows a confirmation summary and waits for the customer to explicitly confirm before writing anything. Once confirmed, it saves the order to Postgres, sends a confirmation email, and tells the customer the order went through.
 
-**Reliability and Data Integrity**
-Order and ticket writes are the system's source of truth and must not
-be lost or duplicated. The confirmation email is sent only after the
-database write succeeds, never before and never as a substitute for
-it.
+### FR5. Order status check
 
-**Security**
-No secrets (API keys, OAuth credentials, database URLs) are committed
-to the repository. All external credentials are loaded from
-environment variables. The database write and email send for any
-order or ticket are gated behind an explicit human confirmation step —
-the agent never executes either autonomously.
+Given an order ID or an email, the agent reports the current status of the order. If the order is delayed, it also gives the reason.
 
-**Scalability**
-The backend is stateless per request — all session state lives in
-Postgres, not in memory so it can run multiple replicas behind a
-load balancer without sticky sessions.
+### FR6. Support ticket creation
 
-**Maintainability**
-Each specialist agent, its tools, and its prompts are isolated in
-their own modules so that a change to one specialist's behavior
-doesn't require touching the others.
+The agent collects the customer's name, email and a description of the issue, then confirms with them. After they confirm, it saves a ticket with an auto generated ticket number to Postgres and sends a confirmation email.
+
+### FR7. Support ticket status check
+
+Given a ticket number, the agent reports whether the ticket is resolved or still pending.
+
+## Non functional requirements
+
+### Performance
+
+Replies should feel like a conversation, not a batch job. Users should see the answer start appearing as it is generated instead of waiting for the whole thing. This applies to messages that trigger a document search or a tool call too, not just simple ones.
+
+### Reliability and data integrity
+
+Orders and tickets in the database are the source of truth, so they must never be lost or saved twice. The confirmation email is sent only after the database write succeeds. It never goes out before the write, and it never replaces it.
+
+### Security
+
+No secrets are committed to the repository. That covers API keys, OAuth credentials and database URLs. All external credentials are loaded from environment variables. The database write and the email for any order or ticket sit behind an explicit human confirmation step, so the agent never does either one on its own.
+
+### Scalability
+
+The backend keeps no session state in memory. Everything lives in Postgres, so the backend can run as several replicas behind a load balancer without sticky sessions.
+
+### Maintainability
+
+Each specialist agent, its tools and its prompts live in their own modules. Changing how one specialist behaves does not mean touching the others.
